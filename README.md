@@ -1,5 +1,7 @@
 # Hrb Notes
 
+![Hrb Notes Dashboard](docs/images/dashboard_screenshot.png)
+
 An Obsidian-compatible web application for browsing, editing, and searching your Markdown vault online. Built to run on plain **shared hosting / cPanel** — no SSH, no Docker, no Node.js, no Composer. Just **PHP 8.1+ and SQLite**.
 
 ---
