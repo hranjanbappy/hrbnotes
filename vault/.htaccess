@@ -1,0 +1,3 @@
+# Notes are served through the PHP media/note routes - block direct access.
+Require all denied
+Deny from all

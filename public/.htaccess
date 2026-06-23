@@ -1,0 +1,27 @@
+# Personal Knowledge Hub - public entry point
+# Point your cPanel document root at this /public folder for best security.
+
+DirectoryIndex index.php
+
+# Optional pretty URLs (?route=x still works without this).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Serve existing files/dirs directly (assets, install.php, etc).
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    # Everything else goes through the front controller.
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Security headers (also set in PHP; harmless duplication).
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "same-origin"
+</IfModule>
+
+# Never serve the SQLite DB even if symlinked here.
+<FilesMatch "\.(sqlite|sqlite3|db)$">
+    Require all denied
+</FilesMatch>

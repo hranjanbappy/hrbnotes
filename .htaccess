@@ -1,0 +1,25 @@
+# Fallback protection for when the document root is the PROJECT ROOT
+# (i.e. you could not point cPanel at /public). This forwards all traffic to
+# the /public front controller and blocks direct access to app internals.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block direct access to sensitive directories outright.
+    RewriteRule ^(app|config|storage)/ - [F,L]
+
+    # Map the web root to /public for asset + installer access FIRST, so these
+    # real files are served before the front-controller catch-all below.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(assets/.*|install\.php)$ public/$1 [QSA,L]
+
+    # If the request maps to a real file/dir inside /public, let it through.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>
+
+# Hard block the database file anywhere.
+<FilesMatch "\.(sqlite|sqlite3|db)$">
+    Require all denied
+</FilesMatch>
